@@ -1,50 +1,40 @@
-## 1. Foundation y Dependencias
+## 1. DbContext y Modelo de Datos
 
-- [ ] 1.1 Agregar paquetes NuGet requeridos (`Npgsql.EntityFrameworkCore.PostgreSQL`, `FluentValidation.AspNetCore`, `Microsoft.AspNetCore.Authentication.JwtBearer`, `xunit`, `Moq`, `Microsoft.AspNetCore.Mvc.Testing`).
-- [ ] 1.2 Configurar conexión PostgreSQL (Neon-compatible) y pipeline de migraciones EF Core.
-- [ ] 1.3 Crear estructura de capas (`Controllers`, `Application`, `Domain`, `Infrastructure`, `Validation`).
+- [ ] 1.1 Agregar los paquetes base del backend y configurar `Npgsql.EntityFrameworkCore.PostgreSQL` para Neon/PostgreSQL.
+- [ ] 1.2 Crear `GarajeDbContext` con `DbSet` para `Tenant`, `Operador`, `EspacioParking`, `TarifaTenant`, `Estadia`, `Comprobante` y catálogos.
+- [ ] 1.3 Implementar las configuraciones Fluent API de EF Core para claves primarias, relaciones, índices únicos y restricciones por tenant.
+- [ ] 1.4 Agregar `TenantId` a todas las entidades de negocio y preparar el `TenantContext` para inyectarlo en cada operación.
+- [ ] 1.5 Aplicar filtros globales `HasQueryFilter` para aislar datos por tenant en consultas EF Core.
+- [ ] 1.6 Crear la migración inicial con semillas de `roles`, `tipos_vehiculo` y `metodos_pago`.
 
-## 2. Modelo de Datos Multi-Tenant
+## 2. Controladores y Flujo de Negocio
 
-- [ ] 2.1 Implementar entidades y configuraciones EF Core para `Tenant`, `Operador`, `EspacioParking`, `TarifaTenant`, `Estadia`, `Comprobante` y catálogos.
-- [ ] 2.2 Añadir columna `TenantId` en tablas de negocio, índices compuestos y restricciones de unicidad por tenant.
-- [ ] 2.3 Generar migración inicial con seeds globales (`roles`, `tipos_vehiculo`, `metodos_pago`).
+- [ ] 2.1 Crear `AuthController` con `POST /api/auth/register` y `POST /api/auth/login`.
+- [ ] 2.2 Crear `ParkingController` con `POST /api/parking/ingreso` y `POST /api/parking/salida`.
+- [ ] 2.3 Implementar `TenantProvisioningService` para registrar tenant, owner y tarifas base en una transacción atómica.
+- [ ] 2.4 Implementar `AuthService` y `JwtTokenService` para emitir JWT con claim obligatorio `tenant_id` y rol.
+- [ ] 2.5 Implementar `ParkingIngresoService` para validar placa, DNI, tipo de vehículo y compatibilidad del espacio.
+- [ ] 2.6 Implementar `ParkingSalidaService` para localizar la estadía abierta, cerrarla y liberar el espacio.
+- [ ] 2.7 Implementar `BillingService` para calcular minutos, horas, días, subtotal neto, IGV y total.
+- [ ] 2.8 Agregar manejo uniforme de errores de dominio para `400`, `401`, `403`, `404` y `409`.
 
-## 3. Seguridad y Contexto Tenant
+## 3. Pruebas
 
-- [ ] 3.1 Implementar `AuthService` y `JwtTokenService` con claim obligatorio `tenant_id`.
-- [ ] 3.2 Implementar `TenantContext` por request y middleware/helper para resolver `TenantId` desde JWT.
-- [ ] 3.3 Aplicar `HasQueryFilter` global por `TenantId` en todas las entidades de negocio.
+- [ ] 3.1 Crear pruebas unitarias de `BillingService` para estadías menores a 24h, mayores a 24h y cálculo de IGV.
+- [ ] 3.2 Crear pruebas unitarias de `AuthService` para emisión de JWT con `tenant_id` y rol.
+- [ ] 3.3 Crear pruebas unitarias de `ParkingIngresoService` para validar tipo de vehículo, placa peruana y DNI.
+- [ ] 3.4 Crear pruebas unitarias de aislamiento multi-tenant verificando que el filtro global no expone datos de otros tenants.
+- [ ] 3.5 Crear pruebas de integración con `Microsoft.AspNetCore.Mvc.Testing` para register/login/ingreso/salida.
+- [ ] 3.6 Crear prueba de concurrencia para el ingreso simultáneo al mismo espacio y verificar que solo una transacción confirma.
+- [ ] 3.7 Ejecutar la suite completa de pruebas y corregir fallos antes de continuar con UI.
 
-## 4. Aprovisionamiento SaaS
+## 4. UI MVC
 
-- [ ] 4.1 Implementar `POST /api/auth/register` con validación de RUC y creación atómica de tenant.
-- [ ] 4.2 Implementar bootstrap transaccional de operador owner, espacios iniciales y tarifas base (`carro`, `camion`, `trailer`).
-- [ ] 4.3 Implementar manejo de conflicto por RUC duplicado y rollback total ante fallos parciales.
-
-## 5. Operación de Parking con Concurrencia
-
-- [ ] 5.1 Implementar `POST /api/parking/ingreso` con FluentValidation (DNI, placa, tipoVehiculo normalizado).
-- [ ] 5.2 Implementar validación cruzada `tipo_vehiculo` vs `tipo_vehiculo_permitido` y errores 400.
-- [ ] 5.3 Implementar transacción explícita y bloqueo pesimista (`FOR UPDATE`) para evitar doble asignación de casillero.
-- [ ] 5.4 Implementar `POST /api/parking/salida` con cierre transaccional de estadía y liberación de espacio.
-
-## 6. Facturación Dinámica e IGV
-
-- [ ] 6.1 Implementar `BillingService` con algoritmo mixto por minutos/horas/días según reglas del dominio.
-- [ ] 6.2 Implementar cálculo financiero en `decimal` para `subtotal_neto`, `igv` y `total` con tasa 18%.
-- [ ] 6.3 Persistir comprobante de salida y devolver desglose completo en la respuesta API.
-
-## 7. Contratos API y Manejo de Errores
-
-- [ ] 7.1 Implementar controladores `AuthController` y `ParkingController` con contratos definidos en spec.
-- [ ] 7.2 Estandarizar respuestas de error (`400`, `401`, `403`, `404`, `409`) con payload consistente.
-- [ ] 7.3 Documentar contratos HTTP y ejemplos de request/response para consumo interno.
-
-## 8. TDD y Validación Integral
-
-- [ ] 8.1 Crear pruebas unitarias de `BillingService` para horas redondeadas, días completos y remanentes.
-- [ ] 8.2 Crear pruebas unitarias de autenticación e inyección de claim `tenant_id`.
-- [ ] 8.3 Crear pruebas unitarias de aislamiento multi-tenant sobre consultas EF Core.
-- [ ] 8.4 Crear pruebas de integración (`Microsoft.AspNetCore.Mvc.Testing`) para register/login/ingreso/salida.
-- [ ] 8.5 Ejecutar suite completa en CI y corregir fallos antes de pasar a implementación final.
+- [ ] 4.1 Crear `HomeController` o redirigir el arranque a la pantalla de login según el estado de autenticación.
+- [ ] 4.2 Diseñar la vista de login para operadores con layout MVC compartido y mensajes de error claros.
+- [ ] 4.3 Crear la vista de registro SaaS para alta de tenant con RUC, nombre comercial y credenciales del owner.
+- [ ] 4.4 Crear las vistas operativas de ingreso y salida de vehículos con formularios simples y validación visual.
+- [ ] 4.5 Crear la vista de configuración de tarifas por tenant para editar precio por hora y por día.
+- [ ] 4.6 Implementar el sistema visual dual definido en el diseño mediante variables CSS en `wwwroot/css/site.css`.
+- [ ] 4.7 Adaptar el `Shared/_Layout.cshtml` para navegación básica, estado de sesión y cambio de tema claro/oscuro.
+- [ ] 4.8 Ajustar estilos responsivos para escritorio y móvil, priorizando uso operativo rápido en garaje.

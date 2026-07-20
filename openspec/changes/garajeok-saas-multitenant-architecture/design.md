@@ -59,6 +59,23 @@ El estado actual del proyecto es una base MVC inicial sin dominio de parking mul
 - **Decisión**: definir primero pruebas unitarias de servicios críticos y pruebas de integración de endpoints antes de implementación full.
 - **Rationale**: minimiza regresiones en reglas de negocio sensibles (aforo, tenant isolation, billing).
 
+## 8) Sistema de Diseño Visual (Implementación Técnica)
+
+- **Tokens CSS:** Se utilizarán variables nativas en `wwwroot/css/site.css` para el modo dual:
+  ```css
+  :root { /* Modo Claro - Editorial */
+    --bg-color: #FDFBF7;
+    --text-color: #1A1A1A;
+    --accent-primary: #8C2F63;
+    --accent-secondary: #2F6B4F;
+  }
+  [data-theme='dark'] { /* Modo Oscuro - HUD Consola */
+    --bg-color: #080C0A;
+    --text-color: #3CFFA0;
+    --accent-primary: #3CFFA0;
+    --accent-secondary: #55D6FF;
+  }
+
 ## Esquema Relacional Multi-Tenant (PostgreSQL DDL Conceptual)
 
 ```sql
@@ -262,6 +279,7 @@ ParkG/
 4. Implementar ingreso/salida transaccional con bloqueos.
 5. Implementar cálculo de cobro y comprobantes.
 6. Ejecutar suites TDD unitarias e integración en CI.
+7. Configurar CI/CD básico o Dockerfile para despliegue automatizado del backend .NET 9 en Render (Web Service), conectando la variable de entorno `DefaultConnection` a Neon PostgreSQL en producción.
 
 Rollback:
 - Revertir despliegue de API.
@@ -272,3 +290,4 @@ Rollback:
 1. **Numeración Fiscal:** Para la Fase 1 (MVP SaaS), se utilizará únicamente numeración de Ticket Interno (Ej. `TK-20260719-001`). La facturación electrónica con la SUNAT (XML/CDR) queda fuera del alcance actual y se abordará en la Fase 2 como un módulo adicional para los Tenants.
 2. **Tolerancia de Gracia (Salida):** Queda postergado para la siguiente iteración para no añadir complejidad a la lógica de tiempo actual. En el futuro, se agregará como una columna `minutos_tolerancia` en la tabla `tarifas_tenant`.
 3. **Auditoría Inmutable (Event Sourcing):** No se implementará por ahora. El diseño relacional actual cumple con los requisitos de trazabilidad básicos al registrar `operador_ingreso_id` y `operador_salida_id` en la tabla `estadias`.
+
