@@ -38,7 +38,7 @@ GarajeOk necesita una base arquitectónica SaaS multi-tenant robusta para operar
 - APIs impactadas: nuevos endpoints de registro/login y flujo operativo de parking.
 - Riesgos mitigados por diseño: fuga de datos entre tenants, condiciones de carrera en asignación de casilleros y errores de facturación por precisión decimal.
 
-### 8) Sistema de Diseño Visual (Tokens de UI)
+### Sistema de Diseño Visual (Tokens de UI)
 - **Decisión**: El Frontend implementará un diseño adaptativo de doble propósito basado en variables nativas de CSS.
   - *Modo Claro (Editorial)*: Fondo crema, textos oscuros, acentos magenta profundo (`#8C2F63`) y verde medio (`#2F6B4F`).
   - *Modo Oscuro (Consola HUD)*: Interfaz tipo terminal de monitoreo con fondo oscuro profundo (`#080C0A`), bordes y textos en verde neón (`#3CFFA0`) y cian (`#55D6FF`).
