@@ -4,7 +4,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Configuration;
 using ParkG.Infrastructure.Data;
 
 namespace ParkG.Tests;
@@ -17,17 +16,6 @@ public sealed class ParkingWebApplicationFactory : WebApplicationFactory<Program
     {
         builder.UseEnvironment("Testing");
         _connection.Open();
-
-        builder.ConfigureAppConfiguration((_, configurationBuilder) =>
-        {
-            var testSettings = new Dictionary<string, string?>
-            {
-                ["DatabaseProvider"] = "Sqlite",
-                ["ConnectionStrings:DefaultConnection"] = "DataSource=:memory:"
-            };
-
-            configurationBuilder.AddInMemoryCollection(testSettings);
-        });
 
         builder.ConfigureServices(services =>
         {
