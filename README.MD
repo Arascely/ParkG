@@ -36,6 +36,10 @@ Este proyecto no fue programado de manera improvisada; sigue un ciclo de vida de
     * *Modo Claro (Editorial):* Interfaz administrativa corporativa.
     * *Modo Oscuro (Consola HUD):* Interfaz de alto contraste tipo terminal para operadores nocturnos.
 
+##  QA Manual
+
+Para validaciones humanas previas a liberación, consulta la guía en [docs/qa/README.md](docs/qa/README.md).
+
 ##  Requisitos Previos (Instalación Local)
 
 * [.NET 9 SDK](https://dotnet.microsoft.com/download) instalado.
