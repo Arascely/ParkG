@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Ingreso";
+}
+
+<section class="hero-grid mb-4">
+    <article class="hero-card">
+        <div class="hero-kicker">Operación activa</div>
+        <h1 class="hero-title">Ingreso y salida de <span>vehículos</span>.</h1>
+        <p class="hero-text">
+            Selecciona un espacio libre compatible, registra el ingreso y liquida la salida desde una vista dedicada con
+            validación estricta y resultados legibles.
+        </p>
+    </article>
+
+    <aside class="summary-card">
+        <div class="eyebrow mb-3">Estado de sesión</div>
+        <div id="sessionStatus" class="result-box">Sin token cargado.</div>
+        <small class="d-block mt-3">El listado de espacios libres se actualiza según el tipo de vehículo seleccionado.</small>
+    </aside>
+</section>
+
+<section class="panel-grid">
+    <article class="panel-card panel-card--wide">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <h2 class="mb-1">Registrar ingreso</h2>
+                <p class="mb-0">Solo se muestran espacios libres compatibles con el vehículo seleccionado.</p>
+            </div>
+            <span id="espaciosDisponiblesStatus" class="eyebrow">Cargando disponibilidad</span>
+        </div>
+
+        <form id="ingresoForm" class="vstack gap-3" novalidate>
+            <div class="row g-3">
+                <div class="col-12 col-lg-4">
+                    <label class="form-label" for="PlacaIngreso">Placa</label>
+                    <input class="form-control" id="PlacaIngreso" name="Placa" maxlength="12" placeholder="ABC-123" />
+                    <div id="PlacaIngresoError" class="invalid-feedback d-block" hidden></div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <label class="form-label" for="TipoVehiculoIngreso">Tipo Vehículo</label>
+                    <select class="form-select" id="TipoVehiculoIngreso" name="TipoVehiculo">
+                        <option value="carro">carro</option>
+                        <option value="camion">camion</option>
+                        <option value="trailer">trailer</option>
+                    </select>
+                    <div id="TipoVehiculoIngresoError" class="invalid-feedback d-block" hidden></div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <label class="form-label" for="EspacioCodigoIngreso">Espacio libre</label>
+                    <select class="form-select" id="EspacioCodigoIngreso" name="EspacioCodigo">
+                        <option value="">Cargando espacios libres...</option>
+                    </select>
+                    <div id="EspacioCodigoIngresoError" class="invalid-feedback d-block" hidden></div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <label class="form-label" for="DniClienteIngreso">DNI</label>
+                    <input class="form-control" id="DniClienteIngreso" name="DniCliente" maxlength="8" inputmode="numeric" placeholder="12345678" />
+                    <div id="DniClienteIngresoError" class="invalid-feedback d-block" hidden></div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 pt-2">
+                <button class="btn btn-primary" type="submit">Registrar ingreso</button>
+                <button class="btn btn-outline-secondary" type="button" id="reloadSpacesButton">Recargar espacios</button>
+            </div>
+        </form>
+
+        <div id="ingresoResult" class="result-box mt-3">Sin respuesta todavía.</div>
+    </article>
+
+    <article class="panel-card">
+        <h2 class="mb-2">Registrar salida</h2>
+        <p class="mb-3">Liquida la estadía usando el ticket abierto asociado a la placa.</p>
+
+        <form id="salidaForm" class="vstack gap-3" novalidate>
+            <div>
+                <label class="form-label" for="PlacaSalida">Placa</label>
+                <input class="form-control" id="PlacaSalida" name="Placa" maxlength="12" placeholder="ABC-123" />
+            </div>
+            <button class="btn btn-outline-secondary" type="submit">Liquidar salida</button>
+        </form>
+
+        <div id="salidaResult" class="result-box mt-3">Sin respuesta todavía.</div>
+    </article>
+</section>

@@ -9,39 +9,86 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ParkG.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ParkG</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+@{
+    var shellMode = (ViewData["ShellMode"] as string) ?? "app";
+    var navKey = (ViewData["NavKey"] as string) ?? string.Empty;
+    var isAppShell = string.Equals(shellMode, "app", StringComparison.OrdinalIgnoreCase);
+    var isPublicShell = string.Equals(shellMode, "public", StringComparison.OrdinalIgnoreCase);
+}
+<body data-theme="light" data-shell-mode="@shellMode">
+    <div class="app-shell @(isAppShell ? "app-shell--authenticated" : "app-shell--public")">
+        <header class="topbar">
+            <div class="container-fluid topbar-inner">
+                <a class="brand" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                    <span class="brand-mark">PG</span>
+                    <span>ParkG</span>
+                </a>
+                <button class="btn btn-sm btn-outline-secondary d-lg-none" type="button" data-sidebar-toggle aria-controls="appSidebar" aria-expanded="false">Menú</button>
+                <nav class="topnav @(isAppShell ? "topnav--app" : "topnav--public")">
+                    @if (isAppShell)
+                    {
+                        <a asp-controller="Home" asp-action="Dashboard" class="@(navKey == "dashboard" ? "is-active" : "")">Dashboard</a>
+                        <a asp-controller="Tarifas" asp-action="Index" class="@(navKey == "tarifas" ? "is-active" : "")">Tarifas</a>
+                        <a asp-controller="Home" asp-action="Ingreso" class="@(navKey == "ingreso" ? "is-active" : "")">Ingreso</a>
+                        <a href="#theme" data-theme-toggle>Modo</a>
+                    }
+                    else if (isPublicShell)
+                    {
+                        <a asp-controller="Home" asp-action="Login" class="@(navKey == "login" ? "is-active" : "")">Login</a>
+                        <a asp-controller="Home" asp-action="Register" class="@(navKey == "register" ? "is-active" : "")">Register</a>
+                        <a href="#theme" data-theme-toggle>Modo</a>
+                    }
+                </nav>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        </header>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ParkG - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+        @if (isAppShell)
+        {
+            <div class="shell-grid">
+                <aside id="appSidebar" class="app-sidebar">
+                    <div class="sidebar-card">
+                        <div class="eyebrow mb-2">Navegación</div>
+                        <nav class="sidebar-nav">
+                            <a asp-controller="Home" asp-action="Dashboard" class="sidebar-link @(navKey == "dashboard" ? "is-active" : "")">
+                                <strong>Dashboard</strong>
+                                <span>Resumen operativo</span>
+                            </a>
+                            <a asp-controller="Tarifas" asp-action="Index" class="sidebar-link @(navKey == "tarifas" ? "is-active" : "")">
+                                <strong>Tarifas</strong>
+                                <span>Precios y versiones</span>
+                            </a>
+                            <a asp-controller="Home" asp-action="Ingreso" class="sidebar-link @(navKey == "ingreso" ? "is-active" : "")">
+                                <strong>Ingreso</strong>
+                                <span>Entrada y salida</span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <div class="sidebar-card sidebar-card--muted">
+                        <div class="eyebrow mb-2">Estado</div>
+                        <div class="result-box result-box--compact">Sesión lista para operar.</div>
+                    </div>
+                </aside>
+
+                <main role="main" class="page-shell container-fluid px-3 px-lg-4 py-4 app-main">
+                    @RenderBody()
+                </main>
+            </div>
+        }
+        else
+        {
+            <main role="main" class="page-shell container-fluid px-3 px-lg-4 py-4 app-main app-main--public">
+                @RenderBody()
+            </main>
+        }
+
+        <footer class="page-footer">
+            <div class="container-fluid px-3 px-lg-4 py-3">
+                <span>ParkG SaaS Multi-Tenant</span>
+                <span class="footer-note">MVC + EF Core + JWT + PostgreSQL</span>
+            </div>
+        </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

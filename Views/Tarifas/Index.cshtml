@@ -1,0 +1,124 @@
+@{
+    ViewData["Title"] = "Tarifas";
+}
+
+<section class="hero-grid mb-4">
+    <article class="hero-card">
+        <div class="hero-kicker">Configuración operativa</div>
+        <h1 class="hero-title">Tarifas por <span>Tenant</span>.</h1>
+        <p class="hero-text">
+            Ajusta el precio por hora y por día para carro, camión y tráiler. La vista presenta valores localizados y un
+            historial preparado para nuevas versiones de tarifas.
+        </p>
+    </article>
+
+    <aside class="summary-card">
+        <div class="eyebrow mb-3">Estado de sesión</div>
+        <div id="sessionStatus" class="result-box result-box--compact">Sin token cargado.</div>
+        <small class="d-block mt-3">Si el token expiró, serás redirigido al Login.</small>
+    </aside>
+</section>
+
+<section class="panel-grid">
+    <article class="panel-card panel-card--wide">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <h2 class="mb-1">Editar tarifas vigentes</h2>
+                <p class="mb-0">Se cargan y guardan contra <code>/api/tarifas/current</code>.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-secondary" type="button" id="reloadTarifasButton">Recargar</button>
+                <button class="btn btn-primary" type="button" id="confirmTarifasButton">Guardar tarifas</button>
+            </div>
+        </div>
+
+        <div class="tariff-summary-grid mb-4">
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <article class="tariff-card" data-tariff-card="carro">
+                        <div class="eyebrow mb-2">Carro</div>
+                        <strong class="tariff-money" data-currency-field="carro-hora">S/ 0.00</strong>
+                        <div class="text-body-secondary">Hora</div>
+                        <small data-currency-note="carro-dia">Día: S/ 0.00</small>
+                    </article>
+                </div>
+                <div class="col-12 col-md-4">
+                    <article class="tariff-card" data-tariff-card="camion">
+                        <div class="eyebrow mb-2">Camión</div>
+                        <strong class="tariff-money" data-currency-field="camion-hora">S/ 0.00</strong>
+                        <div class="text-body-secondary">Hora</div>
+                        <small data-currency-note="camion-dia">Día: S/ 0.00</small>
+                    </article>
+                </div>
+                <div class="col-12 col-md-4">
+                    <article class="tariff-card" data-tariff-card="trailer">
+                        <div class="eyebrow mb-2">Tráiler</div>
+                        <strong class="tariff-money" data-currency-field="trailer-hora">S/ 0.00</strong>
+                        <div class="text-body-secondary">Hora</div>
+                        <small data-currency-note="trailer-dia">Día: S/ 0.00</small>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <form id="tarifasForm" class="vstack gap-3">
+            <div class="row g-3 align-items-end tarifa-row" data-vehicle="carro">
+                <div class="col-12 col-lg-3">
+                    <label class="form-label">Vehículo</label>
+                    <input class="form-control" value="Carro" readonly />
+                </div>
+                <div class="col-12 col-lg-3">
+                    <label class="form-label" for="carroTarifaHora">Precio por hora</label>
+                    <input class="form-control" id="carroTarifaHora" type="number" step="0.01" min="0" data-field="tarifaHora" />
+                </div>
+                <div class="col-12 col-lg-3">
+                    <label class="form-label" for="carroTarifaDia">Precio por día</label>
+                    <input class="form-control" id="carroTarifaDia" type="number" step="0.01" min="0" data-field="tarifaDia" />
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-end tarifa-row" data-vehicle="camion">
+                <div class="col-12 col-lg-3">
+                    <label class="form-label">Vehículo</label>
+                    <input class="form-control" value="Camión" readonly />
+                </div>
+                <div class="col-12 col-lg-3">
+                    <label class="form-label" for="camionTarifaHora">Precio por hora</label>
+                    <input class="form-control" id="camionTarifaHora" type="number" step="0.01" min="0" data-field="tarifaHora" />
+                </div>
+                <div class="col-12 col-lg-3">
+                    <label class="form-label" for="camionTarifaDia">Precio por día</label>
+                    <input class="form-control" id="camionTarifaDia" type="number" step="0.01" min="0" data-field="tarifaDia" />
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-end tarifa-row" data-vehicle="trailer">
+                <div class="col-12 col-lg-3">
+                    <label class="form-label">Vehículo</label>
+                    <input class="form-control" value="Tráiler" readonly />
+                </div>
+                <div class="col-12 col-lg-3">
+                    <label class="form-label" for="trailerTarifaHora">Precio por hora</label>
+                    <input class="form-control" id="trailerTarifaHora" type="number" step="0.01" min="0" data-field="tarifaHora" />
+                </div>
+                <div class="col-12 col-lg-3">
+                    <label class="form-label" for="trailerTarifaDia">Precio por día</label>
+                    <input class="form-control" id="trailerTarifaDia" type="number" step="0.01" min="0" data-field="tarifaDia" />
+                </div>
+            </div>
+        </form>
+
+        <div id="tarifasResult" class="result-box mt-3">Sin respuesta todavía.</div>
+    </article>
+
+    <article class="panel-card">
+        <h2 class="mb-2">Historial de tarifas</h2>
+        <p class="mb-3">Estructura preparada para versiones anteriores y cambios futuros.</p>
+        <div id="tarifasHistory" class="tariff-history-grid">
+            <div class="history-card">
+                <strong>Sin versiones históricas</strong>
+                <small>Este espacio quedará conectado al historial de cambios cuando se habilite el backend correspondiente.</small>
+            </div>
+        </div>
+    </article>
+</section>

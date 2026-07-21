@@ -1,8 +1,94 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero-grid mb-4">
+    <article class="hero-card">
+        <div class="hero-kicker">SaaS Multi-Tenant / MVC / JWT / PostgreSQL</div>
+        <h1 class="hero-title">Control total de <span>ParkG</span> desde una sola pantalla.</h1>
+        <p class="hero-text">
+            Resume la operación del tenant, accede a tarifas e ingreso desde la barra lateral y mantén una visión clara de
+            la actividad del parking sin depender de bloques apilados ni respuestas crudas.
+        </p>
+
+        <div class="hero-stats">
+            <div class="stat-chip">
+                <strong>Tenant Isolation</strong>
+                <span>Filtros globales por TenantId</span>
+            </div>
+            <div class="stat-chip">
+                <strong>JWT Session</strong>
+                <span>Menú visible solo con sesión activa</span>
+            </div>
+            <div class="stat-chip">
+                <strong>Operación clara</strong>
+                <span>Dashboard, Tarifas e Ingreso separados</span>
+            </div>
+        </div>
+    </article>
+
+    <aside class="summary-card">
+        <div class="eyebrow mb-3">Estado de sesión</div>
+        <div id="sessionStatus" class="result-box">Sesión lista para operar.</div>
+        <small class="d-block mt-3">El panel lateral aparece cuando el JWT sigue siendo válido.</small>
+    </aside>
+</section>
+
+<section class="kpi-grid mb-4">
+    <article class="kpi-card">
+        <span class="kpi-label">Espacios libres</span>
+        <strong class="kpi-value" data-kpi="free-spaces">--</strong>
+        <small>Se alimenta desde la vista de Ingreso.</small>
+    </article>
+    <article class="kpi-card">
+        <span class="kpi-label">Tarifas vigentes</span>
+        <strong class="kpi-value" data-kpi="tariffs">3</strong>
+        <small>Carro, camión y tráiler con lectura local.</small>
+    </article>
+    <article class="kpi-card">
+        <span class="kpi-label">Estadías abiertas</span>
+        <strong class="kpi-value" data-kpi="open-stays">--</strong>
+        <small>Resumen operativo para control diario.</small>
+    </article>
+    <article class="kpi-card">
+        <span class="kpi-label">Sesión</span>
+        <strong class="kpi-value">Activa</strong>
+        <small>JWT cargado en el navegador.</small>
+    </article>
+</section>
+
+<section class="panel-grid">
+    <article class="panel-card">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <h2 class="mb-1">Accesos rápidos</h2>
+                <p class="mb-0">Usa la barra lateral para saltar entre los módulos principales.</p>
+            </div>
+            <a class="btn btn-outline-secondary" href="/ingreso">Ir a ingreso</a>
+        </div>
+
+        <div class="quick-links">
+            <a class="quick-link" href="/tarifas">
+                <strong>Tarifas</strong>
+                <span>Editar montos con formato local.</span>
+            </a>
+            <a class="quick-link" href="/ingreso">
+                <strong>Ingreso</strong>
+                <span>Registrar vehículos con espacios libres.</span>
+            </a>
+            <a class="quick-link" href="/register">
+                <strong>Registro SaaS</strong>
+                <span>Crear un nuevo tenant si hace falta.</span>
+            </a>
+        </div>
+    </article>
+
+    <article class="panel-card">
+        <h2 class="mb-2">Historial operativo</h2>
+        <p class="mb-3">Espacio preparado para métricas, actividad reciente y futuros resúmenes.</p>
+        <div class="empty-state">
+            <strong>Sin eventos recientes</strong>
+            <span>Aquí se pueden insertar KPIs en vivo o una bitácora de movimiento.</span>
+        </div>
+    </article>
+</section>

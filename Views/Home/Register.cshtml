@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Registro SaaS";
+}
+
+<section class="hero-grid mb-4">
+    <article class="hero-card">
+        <div class="hero-kicker">Alta SaaS</div>
+        <h1 class="hero-title">Crea un tenant en <span>ParkG</span>.</h1>
+        <p class="hero-text">
+            Registra el tenant, crea el operador propietario y deja listo el acceso para empezar a operar parking sin salir
+            del flujo de alta.
+        </p>
+    </article>
+
+    <aside class="summary-card">
+        <div class="eyebrow mb-3">Acceso</div>
+        <div id="sessionStatus" class="result-box">Sin token cargado.</div>
+        <small class="d-block mt-3">Si ya tienes una cuenta, puedes volver al login sin perder el contexto.</small>
+    </aside>
+</section>
+
+<section class="panel-grid">
+    <article class="panel-card panel-card--wide">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <h2 class="mb-1">Registrar tenant</h2>
+                <p class="mb-0">El formulario crea el tenant, el owner inicial y las tarifas base.</p>
+            </div>
+            <a class="btn btn-outline-secondary" href="/login">Ya tengo una cuenta</a>
+        </div>
+
+        <form id="registerForm" class="vstack gap-3" novalidate>
+            <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                    <label class="form-label" for="Ruc">RUC</label>
+                    <input class="form-control" id="Ruc" name="Ruc" maxlength="11" inputmode="numeric" autocomplete="off" placeholder="12345678901" />
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="form-label" for="NombreComercial">Nombre Comercial</label>
+                    <input class="form-control" id="NombreComercial" name="NombreComercial" autocomplete="organization" placeholder="Garaje Centro" />
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="form-label" for="OwnerUsername">Usuario Owner</label>
+                    <input class="form-control" id="OwnerUsername" name="OwnerUsername" autocomplete="username" placeholder="owner1" />
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="form-label" for="OwnerPassword">Contraseña</label>
+                    <input class="form-control" id="OwnerPassword" name="OwnerPassword" type="password" autocomplete="new-password" placeholder="Secret123!" />
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 pt-2">
+                <button class="btn btn-primary" type="submit">Crear tenant</button>
+            </div>
+        </form>
+
+        <div id="registerResult" class="result-box mt-3">Sin respuesta todavía.</div>
+    </article>
+</section>

@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="hero-grid mb-4">
+    <article class="hero-card">
+        <div class="hero-kicker">Acceso seguro</div>
+        <h1 class="hero-title">Inicia sesión en <span>ParkG</span>.</h1>
+        <p class="hero-text">
+            El panel se protege con JWT. Si el token no existe o expiró, esta pantalla permanece disponible para autenticación.
+            Si ya estás autenticado, JavaScript te enviará automáticamente al Dashboard.
+        </p>
+    </article>
+
+    <aside class="summary-card">
+        <div class="eyebrow mb-3">Estado de sesión</div>
+        <div id="sessionStatus" class="result-box">Sin token cargado.</div>
+    </aside>
+</section>
+
+<section class="panel-grid">
+    <article class="panel-card">
+        <h2>Login</h2>
+        <p>Autentica un operador para habilitar el Dashboard y los módulos de parking.</p>
+
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-7">
+                <form id="loginForm" class="vstack gap-3" novalidate>
+                    <div>
+                        <label class="form-label" for="LoginRuc">RUC</label>
+                        <input class="form-control" id="LoginRuc" name="Ruc" maxlength="11" inputmode="numeric" autocomplete="off" aria-describedby="LoginRucHelp LoginRucError" placeholder="12345678901" />
+                        <div id="LoginRucHelp" class="form-text">11 dígitos numéricos, sin guiones.</div>
+                        <div id="LoginRucError" class="invalid-feedback d-block" hidden></div>
+                    </div>
+                    <div>
+                        <label class="form-label" for="Username">Usuario</label>
+                        <input class="form-control" id="Username" name="Username" autocomplete="username" aria-describedby="UsernameHelp UsernameError" placeholder="owner1" />
+                        <div id="UsernameHelp" class="form-text">Usa el nombre de acceso del operador.</div>
+                        <div id="UsernameError" class="invalid-feedback d-block" hidden></div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <label class="form-label mb-0" for="Password">Contraseña</label>
+                            <button class="btn btn-link btn-sm px-0" id="PasswordToggle" type="button" aria-pressed="false" aria-controls="Password">Mostrar contraseña</button>
+                        </div>
+                        <input class="form-control" id="Password" name="Password" type="password" autocomplete="current-password" aria-describedby="PasswordHelp PasswordError" placeholder="Secret123!" />
+                        <div id="PasswordHelp" class="form-text">No uses contraseñas de uso compartido fuera del entorno de pruebas.</div>
+                        <div id="PasswordError" class="invalid-feedback d-block" hidden></div>
+                    </div>
+                    <button id="LoginSubmit" class="btn btn-primary" type="submit" data-default-label="Entrar">Entrar</button>
+                </form>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div id="loginResult" class="result-box" role="status" aria-live="polite" aria-atomic="true">Sin respuesta todavía.</div>
+                <div class="mt-3 d-grid gap-2">
+                    <a class="btn btn-outline-secondary" href="/register">Ir al registro SaaS</a>
+                    <small class="text-body-secondary">Si todavía no existe el tenant, usa el formulario de alta desde la pantalla principal.</small>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
